@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>React Webcam</title>
+  <style>
+    body {
+      font-family: "Helvetica Neue", Helvetica, sans-serif;
+      font-weight: 200;
+      margin: 0 auto 50px;
+      width: 750px;
+    }
+    textarea {
+      font-family: monospace;
+      font-size: inherit;
+      height: 150px;
+      width: 100%;
+    }
+    pre {
+      white-space: pre-wrap;
+    }
+    .controls {
+      margin: 10px 0;
+    }
+    .webcams > video:nth-of-type(1) {
+      -webkit-filter: grayscale(1);
+      filter: grayscale(1);
+    }
+    .webcams > video:nth-of-type(2) {
+      -webkit-filter: sepia(1);
+      filter: sepia(1);
+    }
+    .webcams > video:nth-of-type(3) {
+      -webkit-filter: saturate(8);
+      filter: saturate(8);
+    }
+    .webcams > video:nth-of-type(4) {
+      -webkit-filter: hue-rotate(90deg);
+      filter: hue-rotate(90deg);
+    }
+    .webcams > video:nth-of-type(6) {
+      -webkit-filter: invert(1);
+      filter: invert(1);
+    }
+    .webcams > video:nth-of-type(7) {
+      -webkit-filter: brightness(3);
+      filter: brightness(3);
+    }
+    .webcams > video:nth-of-type(8) {
+      -webkit-filter: contrast(4);
+      filter: contrast(4);
+    }
+    .webcams > video:nth-of-type(9) {
+      -webkit-filter: blur(1px);
+      filter: blur(1px);
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@15.5.4/dist/react.js"></script>
+  <script src="https://unpkg.com/react-dom@15.5.4/dist/react-dom.js"></script>
+  <script src="https://unpkg.com/babel-transform-in-browser@6.4.6/dist/btib.min.js"></script>
+    <!-- <script src="../dist/WebCam.js"></script> -->
+  <script src="../dist/index.js"></script>
+  <script type="text/es2015">
+    // getUserMedia only works for secure pages
+    // if (!/https/.test(window.location.protocol)) window.location.protocol = 'https://';
+
+    class App extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          screenshot: null,
+          tab: 0
+        };
+      }
+      handleClick = () => {
+        const screenshot = this.webcam.getScreenshot();
+        this.setState({ screenshot });
+      }
+      render() {
+        return (
+          <div>
+            <h1>react-webcam</h1>
+            <WebCam
+              audio={false}
+              ref={node => this.webcam = node}
+            />
+            <div>
+              <h2>Screenshots</h2>
+              <div className='screenshots'>
+                <div className='controls'>
+                  <button onClick={this.handleClick}>capture</button>
+                </div>
+                {this.state.screenshot ? <img src={this.state.screenshot} /> : null}
+              </div>
+            </div>
+          </div>
+        );
+      }
+    }
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>
